@@ -1,0 +1,12 @@
+#!/bin/bash
+echo test
+if [ $1 = -h ] ; then
+	echo usage: PLACEHOLDER [how long you want to record in seconds]
+else
+	if [ $1 -gt 0 ]; then
+		ffmpeg -y -video_size 1280x720 -framerate 20 -f x11grab -i :0.0+0,0 -t $1 input.mp4
+		ffmpeg -y -ss 0 -i input.mp4 -vf "fps=20,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 output.gif
+	else
+		echo enter a non-negitive number
+	fi
+fi
